@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vòng Quay Đổi Thưởng</title>
+
+<style>
+:root{
+    --gold:#ffd700;
+    --pink:#ff5f9e;
+}
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:radial-gradient(circle at top,#ff9a9e,#6c5ce7 70%);
+    font-family:'Segoe UI',sans-serif;
+    overflow:hidden;
+}
+
+body::before{
+    content:"";
+    position:absolute;
+    width:600px;
+    height:600px;
+    background:conic-gradient(var(--gold),#fff,var(--pink),var(--gold));
+    border-radius:50%;
+    filter:blur(120px);
+    animation:spinBg 12s linear infinite;
+    pointer-events:none;
+    z-index:0;
+}
+@keyframes spinBg{to{transform:rotate(360deg)}}
+
+.container{
+    position:relative;
+    z-index:2;
+    text-align:center;
+    padding:30px;
+    border-radius:28px;
+    background:rgba(255,255,255,.15);
+    backdrop-filter:blur(14px);
+    box-shadow:0 40px 80px rgba(0,0,0,.45);
+}
+
+h1{color:#fff;margin-bottom:18px}
+
+/* ================= VÒNG QUAY ================= */
+.wheel-wrapper{
+    position:relative;
+    width:340px;
+    height:340px;
+    margin:auto;
+}
+.wheel-wrapper::before{
+    content:"";
+    position:absolute;
+    inset:-18px;
+    border-radius:50%;
+    background:linear-gradient(135deg,var(--gold),#fff,var(--gold));
+    box-shadow:0 0 30px var(--gold);
+}
+.pointer{
+    position:absolute;
+    top:-26px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:10;
+    width:0;height:0;
+    border-left:20px solid transparent;
+    border-right:20px solid transparent;
+    border-top:46px solid var(--gold);
+}
+canvas{
+    position:relative;
+    z-index:5;
+    background:#fff;
+    border-radius:50%;
+    box-shadow:0 25px 45px rgba(0,0,0,.45);
+}
+
+button{
+    margin-top:26px;
+    padding:16px 56px;
+    border:none;
+    border-radius:50px;
+    font-size:20px;
+    font-weight:bold;
+    background:linear-gradient(135deg,var(--gold),#fff6b0);
+    cursor:pointer;
+    box-shadow:0 0 20px var(--gold);
+}
+
+/* ================= POPUP ================= */
+.popup{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.65);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    opacity:0;
+    pointer-events:none;
+    transition:.3s;
+    z-index:999;
+}
+.popup.show{opacity:1;pointer-events:auto}
+.popup-box{
+    background:#fff;
+    padding:30px 38px;
+    border-radius:26px;
+    text-align:center;
+}
+
+/* ================= FORM ================= */
+.name-screen{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.6);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+}
+.name-box{
+    background:#fff;
+    padding:28px 36px;
+    border-radius:26px;
+    width:330px;
+    text-align:center;
+    box-shadow:0 25px 60px rgba(0,0,0,.35);
+}
+
+/* input đẹp */
+.input-group{
+    position:relative;
+    margin:12px 0;
+}
+.input-group input{
+    width:100%;
+    padding:14px 44px 14px 14px;
+    font-size:16px;
+    border-radius:16px;
+    border:1.5px solid #ddd;
+    outline:none;
+}
+.input-group input:focus{
+    border-color:var(--pink);
+}
+.input-group span{
+    position:absolute;
+    right:14px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:18px;
+    cursor:pointer;
+    user-select:none;
+}
+
+/* thông báo */
+.error-text{
+    color:#e74c3c;
+    font-size:14px;
+    min-height:18px;
+}
+.hint{
+    font-size:13px;
+    color:#555;
+    margin-top:6px;
+}
+/* ================= MOBILE RESPONSIVE ================= */
+@media (max-width: 480px){
+
+    body{
+        padding:10px;
+    }
+
+    .container{
+        width:100%;
+        padding:20px 15px;
+        border-radius:22px;
+    }
+
+    h1{
+        font-size:20px;
+        margin-bottom:14px;
+    }
+
+    h2{
+        font-size:16px;
+    }
+
+    .wheel-wrapper{
+        width:260px;
+        height:260px;
+        margin-bottom:30px;
+    }
+
+    .wheel-wrapper::before{
+        inset:-14px;
+    }
+
+    canvas{
+        width:240px;
+        height:240px;
+    }
+
+    .pointer{
+        top:-22px;
+        border-left:16px solid transparent;
+        border-right:16px solid transparent;
+        border-top:36px solid var(--gold);
+    }
+
+    button{
+        padding:12px 36px;
+        font-size:16px;
+        margin-top:18px;
+    }
+
+    /* FORM */
+    .name-box{
+        width:90%;
+        padding:22px 20px;
+        border-radius:22px;
+    }
+
+    .name-box h3{
+        font-size:18px;
+        margin-bottom:10px;
+    }
+
+    .input-group input{
+        font-size:15px;
+        padding:12px 40px 12px 12px;
+    }
+
+    .hint{
+        font-size:12px;
+    }
+
+    /* POPUP */
+    .popup-box{
+        width:90%;
+        padding:24px 20px;
+        border-radius:22px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+<audio id="backgroundMusic" autoplay loop>
+    <source src="spin.mp3" type="audio/mpeg">
+    </audio>
+<!-- FORM -->
+<div class="name-screen" id="nameScreen">
+    <div class="name-box">
+        <h3>Nhập thông tin người chơi</h3>
+
+        <div class="input-group">
+            <input type="text" id="playerNameInput" placeholder="Tên của bạn">
+            <span>👤</span>
+        </div>
+
+        <div class="input-group">
+            <input type="password" id="passwordInput" placeholder="Mật khẩu">
+            <span id="eyeIcon" onclick="togglePassword()">👁️</span>
+        </div>
+
+        <div class="hint">💡 Mật khẩu là ngày thành lập Quân Đội Nhân Dân Việt Nam</div>
+        <div class="error-text" id="nameError"></div>
+
+        <button onclick="saveName()">XÁC NHẬN</button>
+    </div>
+</div>
+
+<div class="container">
+    <h1 style="margin-bottom:50px;color:#000;">🎰 VÒNG QUAY MAY MẮN 🎰</h1>
+
+    <div class="wheel-wrapper" style="margin-bottom:50px;">
+        <div class="pointer"></div>
+        <canvas id="wheel" width="320" height="320"></canvas>
+    </div>
+
+    <button id="spinBtn" onclick="spin()" style="margin-top:-30px;">QUAY NGAY</button>
+    <h2 style="color:#000;">Phần thưởng 300k × Hệ số</h2>
+    <h1 style="color:#000;">🎉 CHÚC BẠN MAY MẮN NHÉ ! 🎉</h1>
+</div>
+
+<div class="popup" id="popup">
+    <div class="popup-box">
+        <h2> CHÚC MỪNG </h2>
+        <p id="resultText"></p>
+        <button onclick="closePopup()">OK</button>
+    </div>
+</div>
+
+<script>
+const PASSWORD="22121944";
+
+const canvas=document.getElementById("wheel");
+const ctx=canvas.getContext("2d");
+const popup=document.getElementById("popup");
+const resultText=document.getElementById("resultText");
+const spinBtn=document.getElementById("spinBtn");
+const nameScreen=document.getElementById("nameScreen");
+const nameError=document.getElementById("nameError");
+
+const values=[1,2,3,4,5,6,7,8,9,10];
+const basePrice=300000;
+const colors=["#ff7675","#74b9ff","#55efc4","#ffeaa7","#a29bfe","#fd79a8","#fab1a0","#81ecec","#6c5ce7","#00cec9"];
+
+const total=values.length;
+const center=canvas.width/2;
+const radius=center-10;
+
+let currentAngle=0;
+let playerName="";
+let hasSpun=false;
+
+/* ẨN / HIỆN MẬT KHẨU */
+function togglePassword(){
+    const pass=document.getElementById("passwordInput");
+    const eye=document.getElementById("eyeIcon");
+    if(pass.type==="password"){
+        pass.type="text";
+        eye.textContent="🙈";
+    }else{
+        pass.type="password";
+        eye.textContent="👁️";
+    }
+}
+
+/* FORM */
+function saveName(){
+    const name=playerNameInput.value.trim();
+    const pass=passwordInput.value.trim();
+
+    if(name===""){
+        nameError.textContent="⚠️ Vui lòng nhập tên của bạn";
+        return;
+    }
+    if(pass!==PASSWORD){
+        nameError.textContent="❌ Bạn đã nhập sai mật khẩu";
+        return;
+    }
+
+    nameError.textContent="";
+    playerName=name;
+    hasSpun=false;
+    nameScreen.style.display="none";
+}
+
+/* VẼ + QUAY */
+function drawWheel(){
+    const slice=2*Math.PI/total;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    for(let i=0;i<total;i++){
+        const start=currentAngle+i*slice-Math.PI/2;
+        ctx.beginPath();
+        ctx.moveTo(center,center);
+        ctx.arc(center,center,radius,start,start+slice);
+        ctx.fillStyle=colors[i];
+        ctx.fill();
+        ctx.save();
+        ctx.translate(center,center);
+        ctx.rotate(start+slice/2);
+        ctx.font="bold 16px Arial";
+        ctx.textAlign="center";
+        ctx.fillStyle="#333";
+        ctx.fillText(values[i],radius*0.65,5);
+        ctx.restore();
+    }
+}
+
+function spin(){
+    if(playerName==="" || hasSpun) return;
+    spinBtn.disabled=true;
+
+    const index=Math.floor(Math.random()*total);
+    const sliceDeg=360/total;
+    const stopDeg=360-(index*sliceDeg+sliceDeg/2);
+    const totalDeg=360*7+stopDeg;
+
+    const start=performance.now();
+    const duration=4500;
+
+    function animate(t){
+        const p=Math.min((t-start)/duration,1);
+        const ease=1-Math.pow(1-p,3);
+        currentAngle=totalDeg*ease*Math.PI/180;
+        drawWheel();
+        if(p<1) requestAnimationFrame(animate);
+        else{
+            hasSpun=true;
+            spinBtn.disabled=false;
+            const money=values[index]*basePrice;
+            resultText.innerHTML=
+            `🎉 <b>${playerName}</b> 🎉<br><br>
+             🎯 <b>${playerName} đã quay trúng số: <b>${values[index]}</b> 🎯<br><br>
+              <b>Phần thưởng ${playerName} nhận được: <br><br>💰 <b>${money.toLocaleString()}đ 💰</b>`;
+            popup.classList.add("show");
+        }
+    }
+    requestAnimationFrame(animate);
+}
+
+function closePopup(){
+    popup.classList.remove("show");
+    playerName="";
+    playerNameInput.value="";
+    passwordInput.value="";
+    nameError.textContent="";
+    nameScreen.style.display="flex";
+}
+
+drawWheel();
+</script>
+
+</body>
+</html>
