@@ -362,7 +362,7 @@ function spin(){
                 spinning=false;
                 const money=values[index]*base;
                 saveHistory(player,values[index],money);
-                showPopup(`🎉 <b>${player}</b><br>🎯 Trúng ô <b>${values[index]}</b><br>💰 Nhận <b>${money.toLocaleString()}đ</b>
+                showPopup(`🎉 <b>Chúc mừng</b> 🎉 <br><br> <b>${player}</b> <br><br>🎯 <b>${player}</b> đã quay trúng ô số :  <b>${values[index]}</b><br>💰 Phần thưởng <b>${player}</b> nhận được :  <b>${money.toLocaleString()}đ 💰</b>
                 <div class='btn-row'><button onclick='nextPlayer()'>OK</button></div>`);
             },500);
         }
@@ -434,3 +434,4 @@ drawWheel();
 </script>
 </body>
 </html>
+
